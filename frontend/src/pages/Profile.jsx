@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaComments, FaUserPlus, FaUserFriends, FaTimes } from 'react-icons/fa'; 
-import { getSearchHistory, getFriendRequestsSent, getFriendsList, getFriendRequestsReceived, removeFriend } from '../features/chats/chatSlice'; // Import removeFriend action
+import {updateStatus, getSearchHistory, getFriendRequestsSent, getFriendsList, getFriendRequestsReceived, removeFriend } from '../features/chats/chatSlice'; 
 import Modal from 'react-modal';
-
 import Spinner from '../components/LoadingSpinner';
 
-Modal.setAppElement('#root'); // Important for accessibility, attach modal to the root element
+Modal.setAppElement('#root');
 
 function Profile() {
   const navigate = useNavigate();
@@ -23,25 +22,24 @@ function Profile() {
     dispatch(getSearchHistory());
     dispatch(getFriendsList());
     dispatch(getFriendRequestsReceived());
+    dispatch(updateStatus({status: 'online'}));
   }, [dispatch]);
 
   const openModal = () => setIsFriendsModalOpen(true);
   const closeModal = () => setIsFriendsModalOpen(false);
 
-  // Remove friend handler
   const handleRemoveFriend = (friendId) => {
-    // Update state immediately to reflect UI changes
     setRemovedFriends([...removedFriends, friendId]);
-
-    // Dispatch the action to remove friend from the database
     dispatch(removeFriend(friendId));
   };
 
-  
-  if (isLoading) {    
+  // Show loading spinner if data is being fetched
+  if (isLoading) {
     return <Spinner />;
   }
 
+  // Check if friendsList is an array and not empty
+  const hasFriends = Array.isArray(friendsList) && friendsList.length > 0;
 
   return (
     <>
@@ -90,11 +88,11 @@ function Profile() {
         style={{
           display: 'flex',
           overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)'  // Semi-transparent overlay
+            backgroundColor: 'rgba(0, 0, 0, 0.5)' 
           },
           content: {
-            width: '500px',  // Set the modal width
-            margin: 'auto',  // Center the modal
+            width: '500px', 
+            margin: 'auto', 
             borderRadius: '10px',
             border: '1px solid #ccc',
             padding: '20px',
@@ -107,26 +105,30 @@ function Profile() {
         </button>
         <h2>List of Friends</h2>
         <div>
-          {friendsList && friendsList.length > 0 ? (
+          {hasFriends ? ( // Check if there are friends to display
             <div>
-              {friendsList.map((friend) => (
-                <li key={friend.id} className="friend-item" style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <span>{friend.name}</span>
-                    {removedFriends.includes(friend._id) ? (
-                      <span className="removed-text">Removed</span>
-                    ) : (
-                      <button
-                        className="btn remove-btn"
-                        onClick={() => handleRemoveFriend(friend._id)}
-                        disabled={removedFriends.includes(friend._id)}
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
+                {friendsList.map((friend) => (
+                  // Check if friend is defined
+                  friend ? (
+                    <li key={friend.id} className="friend-item" style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                        <span>{friend.name}</span>
+                        {removedFriends.includes(friend._id) ? (
+                          <span className="removed-text">Removed</span>
+                        ) : (
+                          <button
+                            className="btn remove-btn"
+                            onClick={() => handleRemoveFriend(friend._id)}
+                            disabled={removedFriends.includes(friend._id)}
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ) : null // Render nothing if friend is undefined
+                ))}
+
             </div>
           ) : (
             <p>You don't have any friends added yet.</p>

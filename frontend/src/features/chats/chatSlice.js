@@ -140,12 +140,7 @@ export const getFriendStatus = createAsyncThunk(
   async (friendId, thunkAPI) => {
     try {
     
-      const authState = thunkAPI.getState().auth;
-
-      if (!authState.user || !authState.user.token) {
-        throw new Error('User or token is missing in the auth state');
-      }
-      const token = authState.user.token;
+      const token = thunkAPI.getState().auth.user.token;
       return await chatService.getFriendStatus(friendId, token);
     } catch (error) {
       const message =
@@ -161,12 +156,7 @@ export const updateStatus = createAsyncThunk(
   async (statusData, thunkAPI) => {
     try {
     
-      const authState = thunkAPI.getState().auth;
-
-      if (!authState.user || !authState.user.token) {
-        throw new Error('User or token is missing in the auth state');
-      }
-      const token = authState.user.token;
+      const token = thunkAPI.getState().auth.user.token;
       return await chatService.updateStatus(statusData, token);
     } catch (error) {
       const message =

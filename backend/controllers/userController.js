@@ -127,7 +127,7 @@ const getUserStatus = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/status
 // @access  Private
 const updateUserStatus = asyncHandler(async (req, res) => {
-  const { status } = req.body;
+  const  status  = req.body.status;
 
   if (!status || !['online', 'offline'].includes(status)) {
     return res.status(400).json({ message: 'Invalid status' });

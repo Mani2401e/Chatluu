@@ -31,7 +31,7 @@ function Login() {
     }
 
     if (user) {
-      dispatch(updateStatus({status: 'online'}));
+
       dispatch(getFriendRequestsSent());
       dispatch(getSearchHistory());
       dispatch(getFriendsList());

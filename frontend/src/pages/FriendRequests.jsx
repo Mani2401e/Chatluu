@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFriendRequestsReceived, acceptFriendRequest, rejectFriendRequest } from '../features/chats/chatSlice';
+import { getFriendRequestsReceived, acceptFriendRequest, rejectFriendRequest, getFriendsList } from '../features/chats/chatSlice';
 import Spinner from '../components/LoadingSpinner';
 
 function FriendRequests() {
@@ -30,11 +30,13 @@ function FriendRequests() {
 
   const handleAccept = (requestId) => {
     dispatch(acceptFriendRequest(requestId));
+    dispatch(getFriendsList());
     setAcceptedRequests(prev => [...prev, requestId]);
   };
 
   const handleReject = (requestId) => {
     dispatch(rejectFriendRequest(requestId));
+    dispatch(getFriendsList());
     setRejectedRequests((prev) => [...prev, requestId]); 
 
     // Check if there are any remaining requests for the user
