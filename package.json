@@ -1,0 +1,37 @@
+{
+  "name": "mernchatapplication",
+  "version": "1.0.0",
+  "description": "developing a chatting application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Manish",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@react-icons/all-files": "^4.1.0",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "icons": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "migrate-mongo": "^11.0.0",
+    "mongoose": "^8.5.2",
+    "react": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "socket.io": "^4.8.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.4"
+  }
+}
